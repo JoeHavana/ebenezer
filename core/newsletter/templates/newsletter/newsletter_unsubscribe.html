@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block content %}
+
+<div class="jumbotron">
+	<h2 class=" text-center">Cancelar Suscripción de Nuestras Publicaciones</h2>
+</div>
+<div class="container">
+	{% include 'messages.html' %}
+	<form class="text-center" method="POST" action="{% url 'newsletter_unsubscribe' %}">{% csrf_token %}
+		<div class="input-group">
+			{% crispy form %}
+			<span class="input-group-btn mx-4">
+				<button class="btn btn-secondary" type="submit">Cancelar Suscripción</button>
+				<a href="/" class="btn btn-danger">Cancelar</a>
+			</span>
+		</div>
+	</form>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+
+	{% if unsubscribed %}
+	  <script type="text/javascript">
+	          Swal.fire({
+	            title: 'Suscripcion Cancelada Satisfactoriamente.',
+	            icon: 'success',
+	            timer: 5000,
+	            //footer: '<strong><a href="{# url 'account_login' #}" rel="nofollow">Login here</a></strong>',
+	            confirmButtonText: 'OK'
+	          });
+	  </script>
+	{% elif not_subscribed %}
+	  <script type="text/javascript">
+	          Swal.fire({
+	            title: 'Usted no está suscrito con el email que ha dado.',
+	            icon: 'info',
+	            timer: 60000,
+	            //footer: '<strong><a href="{# url 'account_login' #}" rel="nofollow">Registrese aquí</a></strong>',
+	            confirmButtonText: 'OK'
+	          });
+	  </script>
+	{% endif %}
+
+{% endblock extra_js %}

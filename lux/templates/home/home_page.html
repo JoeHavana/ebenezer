@@ -1,0 +1,759 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+
+
+{% block custom_css %}
+<style type="text/css">
+  img.full-width {
+    min-width: 100% !important;
+  }
+  img.right {
+    float: right !important;
+  }
+</style>
+{% endblock custom_css %}
+
+{% block body_class %}{% endblock %}
+
+{% block content %}
+
+
+<header>
+{% image self.imagen_destacada original as img %}
+<div id="home" class="intro bg-image" style="background-image: url({{img.url}})"><!-- .route -->
+    <div class="overlay-itro"></div>
+    <div id="particles-js"></div>
+    <div class="intro-content display-table">
+      <div class="table-cell">
+        <div class="container">
+          
+{% include 'messages.html' %}
+
+          <h1 class="intro-title t-shadow mb-4" style="color: #fff; font-size: 48px;">{{ page.main_title_of_the_page }}
+           </h1>
+
+
+          {% if self.header_subtitle %}
+           <p class="intro-subtitle p-shadow" style="font-size: 18px;"><span class="text-slider-items">{{ self.header_subtitle }}</span><strong class="text-slider"></strong></p>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div><!-- End Intro Section -->
+</header>
+
+
+
+
+
+{% if self.show_at_the_beg == "cc" %}
+<!-- Categorias -->
+  <section id="work" class="works sect-pt4">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="title-box text-center">
+              <h3 class="title-a">
+                Categories
+              </h3>
+              <div class="div-line"></div>
+            </div>
+          </div>
+        </div>
+  
+      <div class="row">
+        <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
+          <ul id="portfolio-filters">
+            <li data-filter="*" class="filter-active">All</li>
+              {% for category in categoria_y_tipo.all %}
+                <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
+              {% endfor %}
+
+          </ul>
+        </div>
+      </div>
+
+  
+        <div class="row portfolio-container">
+
+          {% for item in items %}
+          <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
+
+            <div class="work-box">
+              {% if item.or_automate_a_page %}
+                <a href="{{ item.get_absolute_url }}">
+                  {% if item.main_picture_of_presentation %}
+                  <div class="work-img">
+                        {% image item.main_picture_of_presentation width-500 as img %}
+                        <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                  </div>
+                  {% endif %}
+                </a>
+                <div class="work-content">
+                  <div class="row">
+
+                    <div class="col-sm-12">
+                      <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                      <div class="w-more" style="width: 100% !important">
+                        <a href="{{ item.get_absolute_url }}">
+                        <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                        </a> 
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+                
+              {% else %}
+              <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+              {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+              {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+
+                {% if item.main_picture_of_presentation %}
+                <div class="work-img">
+                      {% image item.main_picture_of_presentation width-500 as img %}
+                      <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                </div>
+                {% endif %}
+              </a>
+              <div class="work-content">
+                <div class="row">
+
+                  <div class="col-sm-12">
+                    <h2 class="w-title">
+                    <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                    {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                    {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
+                    <div class="w-more" style="width: 100% !important">
+                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+                      <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                      </a> 
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+  
+      </div>
+    </section>
+{% elif self.show_at_the_beg == "rl" %}
+
+  {% if self.ofertas_especiales %}
+      <!--  Ofertas -->
+      <section class="why-us-1">
+        <div class="container" style="box-shadow: 0 0 10px skyblue;">
+          {% if self.relevant_name or self.relevant_comment %}
+          <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center heading-section">
+              <!--span class="subheading">Servicios</span-->
+              <h2 class="mb-4">{{ self.relevant_name|title }}</h2>
+              <p>{{ self.relevant_comment }}</p>
+              <div class="div-line"></div>
+            </div>
+          </div>
+          {% endif %}
+
+
+
+          <div class="row tabulation mt-4">
+            <div class="col-md-4">
+              <ul class="nav nav-pills nav-fill d-md-flex d-block flex-column">
+                {% for oferta in self.ofertas_especiales.all %}
+                  <li class="nav-item text-center">
+                    <a class="nav-link {% if forloop.counter == 1 %} active {% endif %} py-4" data-toggle="tab" href="#bt{{ oferta.id }}"> {{ oferta.nombre|title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="col-md-8">
+              <div class="tab-content">
+
+                {% for oferta in self.ofertas_especiales.all %}
+                {% image oferta.imagen_destacada original as img %}
+                <div class="tab-pane container p-0 {% if forloop.counter == 1 %} active{% endif %} " id="bt{{ oferta.id }}">
+                  <div class="hide-over col-12">
+                    <a href="{{ oferta.product_url }}" target="_blank">
+                      <img class="img-fluid" width="500" src="{{ img.url }}">
+                    </a>
+                  </div>
+                  <div class="container mt-2 px-4 border">
+                    <h3 class="title-left"><a href="#">{{ oferta.nombre|title }}</a></h3>
+                    <p>{{ oferta.texto }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section><!-- End Ofertas -->
+  {% endif %}
+
+{% elif self.show_at_the_beg == "ct" %}
+    {% for block in self.content %}
+      {% include_block block %}
+    {% endfor %}
+{% endif %}
+
+
+
+{% if self.show_in_midl == "cc" %}
+<!-- Categorias -->
+  <section id="work" class="works sect-pt4">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="title-box text-center">
+              <h3 class="title-a">
+                Categories
+              </h3>
+              <div class="div-line"></div>
+            </div>
+          </div>
+        </div>
+  
+      <div class="row">
+        <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
+          <ul id="portfolio-filters">
+            <li data-filter="*" class="filter-active">All</li>
+              {% for category in categoria_y_tipo.all %}
+                <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
+              {% endfor %}
+
+          </ul>
+        </div>
+      </div>
+
+  
+        <div class="row portfolio-container">
+
+          {% for item in items %}
+          <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
+
+            <div class="work-box">
+              {% if item.or_automate_a_page %}
+                <a href="{{ item.get_absolute_url }}">
+                  {% if item.main_picture_of_presentation %}
+                  <div class="work-img">
+                        {% image item.main_picture_of_presentation width-500 as img %}
+                        <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                  </div>
+                  {% endif %}
+                </a>
+                <div class="work-content">
+                  <div class="row">
+
+                    <div class="col-sm-12">
+                      <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                      <div class="w-more" style="width: 100% !important">
+                        <a href="{{ item.get_absolute_url }}">
+                        <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                        </a> 
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+                
+              {% else %}
+              <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+              {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+              {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+
+                {% if item.main_picture_of_presentation %}
+                <div class="work-img">
+                      {% image item.main_picture_of_presentation width-500 as img %}
+                      <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                </div>
+                {% endif %}
+              </a>
+              <div class="work-content">
+                <div class="row">
+
+                  <div class="col-sm-12">
+                    <h2 class="w-title">
+                    <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                    {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                    {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
+                    <div class="w-more" style="width: 100% !important">
+                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+                      <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                      </a> 
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+  
+      </div>
+    </section>
+{% elif self.show_in_midl == "rl" %}
+  {% if self.ofertas_especiales %}
+      <!--  Ofertas -->
+      <section class="why-us-1">
+        <div class="container" style="box-shadow: 0 0 10px skyblue;">
+          {% if self.relevant_name or self.relevant_comment %}
+          <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center heading-section">
+              <!--span class="subheading">Servicios</span-->
+              <h2 class="mb-4">{{ self.relevant_name|title }}</h2>
+              <p>{{ self.relevant_comment }}</p>
+              <div class="div-line"></div>
+            </div>
+          </div>
+          {% endif %}
+
+
+
+          <div class="row tabulation mt-4">
+            <div class="col-md-4">
+              <ul class="nav nav-pills nav-fill d-md-flex d-block flex-column">
+                {% for oferta in self.ofertas_especiales.all %}
+                  <li class="nav-item text-center">
+                    <a class="nav-link {% if forloop.counter == 1 %} active {% endif %} py-4" data-toggle="tab" href="#bt{{ oferta.id }}"> {{ oferta.nombre|title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="col-md-8">
+              <div class="tab-content">
+
+                {% for oferta in self.ofertas_especiales.all %}
+                {% image oferta.imagen_destacada original as img %}
+                <div class="tab-pane container p-0 {% if forloop.counter == 1 %} active{% endif %} " id="bt{{ oferta.id }}">
+                  <div class="hide-over col-12">
+                    <a href="{{ oferta.product_url }}" target="_blank">
+                      <img class="img-fluid" width="500" src="{{ img.url }}">
+                    </a>
+                  </div>
+                  <div class="container mt-2 px-4 border">
+                    <h3 class="title-left"><a href="#">{{ oferta.nombre|title }}</a></h3>
+                    <p>{{ oferta.texto }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section><!-- End Ofertas -->
+  {% endif %}
+
+{% elif self.show_in_midl == "ct" %}
+    {% for block in self.content %}
+      {% include_block block %}
+    {% endfor %}
+{% endif %}
+
+
+
+
+{% if self.show_at_the_end == "cc" %}
+<!-- Categorias -->
+  <section id="work" class="works sect-pt4">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="title-box text-center">
+              <h3 class="title-a">
+                Categories
+              </h3>
+              <div class="div-line"></div>
+            </div>
+          </div>
+        </div>
+  
+      <div class="row">
+        <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
+          <ul id="portfolio-filters">
+            <li data-filter="*" class="filter-active">All</li>
+              {% for category in categoria_y_tipo.all %}
+                <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
+              {% endfor %}
+
+          </ul>
+        </div>
+      </div>
+
+  
+        <div class="row portfolio-container">
+
+          {% for item in items %}
+          <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
+
+            <div class="work-box">
+              {% if item.or_automate_a_page %}
+                <a href="{{ item.get_absolute_url }}">
+                  {% if item.main_picture_of_presentation %}
+                  <div class="work-img">
+                        {% image item.main_picture_of_presentation width-500 as img %}
+                        <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                  </div>
+                  {% endif %}
+                </a>
+                <div class="work-content">
+                  <div class="row">
+
+                    <div class="col-sm-12">
+                      <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                      <div class="w-more" style="width: 100% !important">
+                        <a href="{{ item.get_absolute_url }}">
+                        <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                        </a> 
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+                
+              {% else %}
+              <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+              {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+              {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+
+                {% if item.main_picture_of_presentation %}
+                <div class="work-img">
+                      {% image item.main_picture_of_presentation width-500 as img %}
+                      <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                </div>
+                {% endif %}
+              </a>
+              <div class="work-content">
+                <div class="row">
+
+                  <div class="col-sm-12">
+                    <h2 class="w-title">
+                    <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                    {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                    {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
+                    <div class="w-more" style="width: 100% !important">
+                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+                      <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                      </a> 
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+  
+      </div>
+    </section>
+{% elif self.show_at_the_end == "rl" %}
+  {% if self.ofertas_especiales %}
+      <!--  Ofertas -->
+      <section class="why-us-1">
+        <div class="container" style="box-shadow: 0 0 10px skyblue;">
+          {% if self.relevant_name or self.relevant_comment %}
+          <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center heading-section">
+              <!--span class="subheading">Servicios</span-->
+              <h2 class="mb-4">{{ self.relevant_name|title }}</h2>
+              <p>{{ self.relevant_comment }}</p>
+              <div class="div-line"></div>
+            </div>
+          </div>
+          {% endif %}
+
+
+
+          <div class="row tabulation mt-4">
+            <div class="col-md-4">
+              <ul class="nav nav-pills nav-fill d-md-flex d-block flex-column">
+                {% for oferta in self.ofertas_especiales.all %}
+                  <li class="nav-item text-center">
+                    <a class="nav-link {% if forloop.counter == 1 %} active {% endif %} py-4" data-toggle="tab" href="#bt{{ oferta.id }}"> {{ oferta.nombre|title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="col-md-8">
+              <div class="tab-content">
+
+                {% for oferta in self.ofertas_especiales.all %}
+                {% image oferta.imagen_destacada original as img %}
+                <div class="tab-pane container p-0 {% if forloop.counter == 1 %} active{% endif %} " id="bt{{ oferta.id }}">
+                  <div class="hide-over col-12">
+                    <a href="{{ oferta.product_url }}" target="_blank">
+                      <img class="img-fluid" width="500" src="{{ img.url }}">
+                    </a>
+                  </div>
+                  <div class="container mt-2 px-4 border">
+                    <h3 class="title-left"><a href="#">{{ oferta.nombre|title }}</a></h3>
+                    <p>{{ oferta.texto }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section><!-- End Ofertas -->
+  {% endif %}
+
+{% elif self.show_at_the_end == "ct" %}
+    {% for block in self.content %}
+      {% include_block block %}
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+{% if posts %}
+<section id="blog" class="blog-mf sect-pt4 route">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+
+            <div class="title-box text-center">
+              <h3 class="title-a">
+                Blog
+              </h3>
+              <p class="subtitle-a">
+                Lea nuestras últimas notificaciones.
+              </p>
+              <div class="div-line"></div>
+            </div>
+          </div>
+          
+        </div>
+        <div class="row">
+
+          {% for post in posts %}
+          {# cache 604800 blog_post_preview self.id #}
+          <div class="col-md-4">
+            <div class="card card-blog">
+              <div class="card-img">
+                {% image post.header_image fill-400x240-c100 as img %}
+                <a href="{{ post.url }}"><img src="{{ img.url }}" alt="{{ img.alt }}" class="img-fluid"></a>
+              </div>
+              <div class="card-body">
+
+                <h3 class="card-title"><a href="{{ post.url }}">{{ post.main_title|title }}</a></h3>
+                {% if post.subtitle %}
+                <p class="card-description">
+                  {{ post.subtitle|richtext }}
+                </p>
+                {% endif %}
+              </div>
+              <div class="card-footer">
+                <div class="post-author">
+                  <a href="#">
+                    {% for author in post.blog_authors.all %}
+                    {% image author.author.image original as img %}
+                    <img src="{{ img.url }}" alt="{{ img.url }}" class="avatar rounded-circle">
+                    <span class="author">{{ author.author.name }}</span>
+                    {% endfor %}
+                  </a>
+                </div>
+                {% if post.published_date_display %}
+                <div class="post-date mt-3">
+                  <span class="fas fa-clock text-info"></span> {{ post.published_date_display }}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {# endcache #}
+          {% endfor %}
+
+
+        </div>
+      </div>
+</section><!-- End Blog Section -->
+{% endif %}
+
+
+    <!-- Seccion del Newsletter -->
+   	<section class="my-5" style="background: #000 !important;">
+	    <div class="large-newsletter">
+	      <div class="container">
+	        <div class="row">
+	          <div class="col-lg-6 text-center">
+	            <h4 class="main-title blink my-4">{{ self.newsletter_title }}</h4>
+	            <p class="text-muted text-left mt-5">{{ self.newsletter_comment }}</p>
+	          </div>
+	          <div class="col-lg-1"></div>
+	          <div class="col-lg-5">
+	            <form action="{% url 'newsletter_signup' %}" method="post">{% csrf_token %}
+	            	<div class="form">
+		              <input type="text" name="name" placeholder="Your Name" />
+		            </div>
+	            	<div class="form">
+		              <input type="email" name="email" placeholder="E-mail" required />
+		              <button class="btn-outline-main" type="submit">Subcribe</button>
+		            </div>
+	            </form>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ======= Contact Section (Non Paralax) ======= -->
+    <section class="contact-area">
+      <div class="contact-inner area-padding">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="section-headline text-center">
+                <h2>Contact Us</h2>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- Start contact icon column -->
+            <div class="col-md-4 col-sm-4 col-xs-12">
+              <div class="contact-icon text-center">
+                <div class="single-icon">
+                  <i class="fa fa-mobile-alt"></i>
+                  <p>
+                    <a rel="nofollow" href="callto: {{ settings.site_settings.Brand.public_phone }}">Phone: {{ settings.site_settings.Brand.public_phone }}</a><br>
+                    <span>{{ settings.site_settings.Brand.extra_data }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Start contact icon column -->
+            <div class="col-md-4 col-sm-4 col-xs-12">
+              <div class="contact-icon text-center">
+                <div class="single-icon">
+                  <i class="fas fa-envelope"></i>
+                  <p>
+                    Email: 
+                    <a rel="nofollow" href="mailto: {{ settings.site_settings.Brand.public_email }}"> {{ settings.site_settings.Brand.public_email }}</a><br>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Start contact icon column -->
+            <div class="col-md-4 col-sm-4 col-xs-12">
+              <div class="contact-icon text-center">
+                <div class="single-icon">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <p>
+                    Location: {{ settings.site_settings.Brand.business_directions }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+
+            <!-- Start Google Map -->
+            {% if settings.site_settings.FromGoogle.google_maps %}
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              {{ settings.site_settings.FromGoogle.google_maps|safe }}
+              <!-- Start Map -->
+              <!--iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22864.11283411948!2d-73.96468908098944!3d40.630720240038435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York%2C+NY%2C+USA!5e0!3m2!1sen!2sbg!4v1540447494452" height="380" style="border:0" allowfullscreen class="w-100"></iframe-->
+              <!-- End Map -->
+            </div>
+            {% endif %}
+            <!-- End Google Map -->
+
+            <!-- Start  contact -->
+            <!--div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form contact-form">
+                <form action="{# url 'contact' #}" method="post"  role="form" class="php-email-form" onsubmit="this.submit(); this.reset();">
+                  <div class="form-group">
+                    <input type="text" name="name" class="form-control" required placeholder="Nombre*" pattern="{a-z A-Z}{4,20}"/>
+                    <div class="validate"></div>
+                  </div>
+                  <div class="form-group">
+                    <input type="email" class="form-control" name="email" placeholder="Email" />
+                    <div class="validate"></div>
+                  </div>
+                  <div class="form-group">
+                    <input type="tel" class="form-control" required name="phone" id="phone" placeholder="Teléfono*" pattern="[0-9]{:8}">
+                    <div class="validate text-danger"></div>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="subject" placeholder="Cabecera"/>
+                    <div class="validate"></div>
+                  </div>
+                  <div class="form-group">
+                    <textarea class="form-control" name="message" rows="5" required placeholder="Mensaje*"></textarea>
+                    <div class="validate"></div>
+                  </div>
+                  <div class="text-center"><button class="btn btn-outline-main" style="width: 30%;" type="submit">Enviar</button></div>
+                </form>
+              </div>
+            </div-->
+          </div>
+        </div>
+      </div>
+    </section><!-- End Contact Section -->
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+
+
+
+{% block extra_js %}
+{% endblock extra_js %}
+
+

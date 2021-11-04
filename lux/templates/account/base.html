@@ -1,0 +1,81 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block head_title %}{% endblock head_title %}
+            {% block title_suffix %}
+                {% with self.get_site.site_name as site_name %}
+                    {% if site_name %}- {{ site_name }}{% endif %}
+                {% endwith %}
+            {% endblock title_suffix %}</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="author" content="Luis joel Pedroso" />
+        <meta name="robots" content="noindex, follow"> <!-- 'Index, Follow'; -->
+      
+  <!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha512-L7MWcK7FNPcwNqnLdZq86lTHYLdQqZaz5YcAgE+5cnGmlw8JT03QB2+oxL100UeB6RlzZLUxCGSS4/++mNZdxw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- icheck bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css" integrity="sha512-8vq2g5nHE062j3xor4XxPeZiPjmRDh6wlufQlfC6pdQ/9urJkU07NM0tEREeymP++NczacJ/Q59ul+/K2eYvcg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Theme style --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0-rc/css/adminlte.min.css" integrity="sha512-YOsl4pnOb5NC868yn1JxAzjJsWkLNtP53uc3OcyAl0Q2R1cwo/mdI1hHSQM8gbIxWj97mKeLoD9R0aiYibFQAA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Bootstrap 4 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<!-- AdminLTE App --><script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0-rc/js/adminlte.min.js" integrity="sha512-pbrNMLSckfh8yEOr2o1RT+4zMU3Sj7+zP3BOY6nFVI/FLnjTRyubNppLbosEt4nvLCcdsEa8tmKhH3uqOYFXKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+
+{% block extra_css %}
+<style type="text/css">
+  p{color: #000;}
+  section{margin-top: 21vh;}
+  label{color: rgba(0,0,0,.8);}
+  input{width: 100%}
+  input.form-check-input:hover{cursor: pointer;}
+  .btn-outline-danger{border: 1px solid red !important;color: red !important;}
+  .btn-outline-danger:hover{background-color: red !important;color: #fff !important;}
+  ul.errorlist li {color: red}
+
+	#particles-js {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  bottom: 0;
+	  right: 0;
+	  width: 100%;
+	  height: 100%; }
+
+	h1 {
+		font-family: serif;
+	}
+
+{% block extra_head %}
+{% endblock extra_head %}
+</style>
+{% endblock extra_css %}
+  </head>
+
+  <body {% block bodyclass %}{% endblock bodyclass %} style="background: #040404 url({% static 'assets/img/account-bg.jpg' %}); user-select: none;">
+    <div id="particles-js"></div>
+    {% block body %}
+
+          
+          
+      {% block content %}
+      {% endblock %}
+    {% endblock %}
+
+    {% block extra_body %}
+    {% endblock %}
+
+  <script src="{% static 'assets/libs/particles/particles.min.js' %}"></script>
+  <script src="{% static 'assets/libs/particles/particle.js' %}"></script>
+
+{% block extra_js %}
+{% endblock extra_js %}
+  </body>
+</html>

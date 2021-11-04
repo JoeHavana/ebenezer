@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}All Categories{% endblock title %}
+
+{% block content %}
+{% include 'messages.html' %}
+
+  <section id="work" class="works sect-pt4" style="margin-top: 3rem;">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="title-box text-center">
+              <h3 class="title-a h1" style="font-family: serif; font-style: italic;">
+                {{ slug|title }}
+              </h3>
+              <div class="div-line"></div>
+            </div>
+          </div>
+        </div>
+        
+  
+        <div class="row portfolio-container">
+
+          {% for item in items_related %}
+          <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
+
+            <div class="work-box">
+              {% if item.or_automate_a_page %}
+                <a href="{{ item.get_absolute_url }}">
+                  {% if item.main_picture_of_presentation %}
+                  <div class="work-img">
+                        {% image item.main_picture_of_presentation width-500 as img %}
+                        <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                  </div>
+                  {% endif %}
+                </a>
+                <div class="work-content">
+                  <div class="row">
+
+                    <div class="col-sm-12">
+                      <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                      <div class="w-more" style="width: 100% !important">
+                        <a href="{{ item.get_absolute_url }}">
+                        <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                        </a> 
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+                
+              {% else %}
+              <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+              {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+              {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+
+                {% if item.main_picture_of_presentation %}
+                <div class="work-img">
+                      {% image item.main_picture_of_presentation width-500 as img %}
+                      <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                </div>
+                {% endif %}
+              </a>
+              <div class="work-content">
+                <div class="row">
+
+                  <div class="col-sm-12">
+                    <h2 class="w-title">
+                    <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                    {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                    {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
+                    <div class="w-more" style="width: 100% !important">
+                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+                      <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                      </a> 
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+   </section>
+  
+	
+{% endblock content %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags cart_template_tags %}
+
+
+
+{% block custom_css %}
+<style type="text/css">
+    /*.nav2{display: none!important;}*/
+    .rich-text p{color: gray;}
+.gallery {
+  display: block;
+  height: 270px;
+  position: relative; }
+
+  .gallery .icon {
+    width: 60px;
+    height: 60px;
+    margin: auto 35%;
+    z-index: 0;
+    opacity: 0;
+    position: absolute;
+    -moz-transition: all 0.6s ease;
+    -o-transition: all 0.6s ease;
+    -webkit-transition: all 0.6s ease;
+    -ms-transition: all 0.6s ease;
+    transition: all 0.6s ease;
+    background: #000;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%; 
+  }
+    .gallery .icon span {
+      color: #fff; }
+  .gallery:hover .icon, .gallery:focus .icon {
+    opacity: 1; }
+
+  img.full-width {
+    min-width: 100% !important;
+  }
+  img.right {
+    float: right !important;
+  }
+</style>
+{% endblock custom_css %}
+
+{% block body_class %}{% endblock %}
+
+{% block content %}
+
+<header>
+{% image self.imagen_destacada original as img %}
+<div id="home" class="intro bg-image" style="background-image: url({{img.url}})"><!-- .route -->
+    <div class="overlay-itro"></div>
+    <div id="particles-js"></div>
+    <div class="intro-content display-table">
+      <div class="table-cell">
+        <div class="container">
+          
+{% include 'messages.html' %}
+
+          <h1 class="intro-title t-shadow mb-4" style="color: #fff; font-size: 48px;">{{ page.main_title_of_the_page }}
+           </h1>
+
+
+          {% if self.header_subtitle %}
+           <p class="intro-subtitle p-shadow" style="font-size: 18px;"><span class="text-slider-items">{{ self.header_subtitle }}</span><strong class="text-slider"></strong></p>
+          {% endif %}
+
+
+        </div>
+      </div>
+    </div>
+  </div><!-- End Intro Section -->
+</header>
+
+<main>
+  
+    {% for block in self.content %}
+      {% include_block block %}
+    {% endfor %}
+</main>
+{% endblock content %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    $(()=>{
+          var carousel2 = function() {
+            $('.related-images').owlCarousel({
+              center: true,
+              loop: true,
+              items:1,
+              margin: 5,
+              stagePadding: 0,
+              nav: true,
+              navText: ['<i class="fa-arrow-left"></i>', '<i class="fa-arrow-right"></i>'],
+              responsive:{
+                0:{
+                  items: 1
+                },
+                600:{
+                  items: 2
+                },
+                1000:{
+                  items: 3
+                }
+              }
+            });
+          };
+          carousel2();
+    });
+  </script>
+{% endblock extra_js %}
