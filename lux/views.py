@@ -20,7 +20,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail, EmailMultiAlternatives
 from datetime import date, datetime
-from xhtml2pdf import pisa
+#from xhtml2pdf import pisa
 from core.store.models import *
 from core.site_settings.models import *
 #from core.streams.choices import *
