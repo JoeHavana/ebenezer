@@ -425,6 +425,15 @@ COMPRESS_CSS_FILTERS = [
 ]
 COMPRESS_CSS_HASHING_METHOD = 'content'
 
+# Dropbox-Storages Configurations:
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+DROPBOX_OAUTH2_TOKEN = 'sl.A7zCHsWt7Zl_w9KTLeNg-2s6iNUhqbLmc8vqm2EFBhVoL35MI4KIRSc3AG5valixRYtN6lnkPay5HaNKESu39XXiCZ6YGvkZYan0WsQLf7dFv5bxIbc_FlzRo_Tj0jfWGrsQu9A'
+"""
+DROPBOX_ROOT_PATH (optional, default '/') Path which will prefix all uploaded files. Must begin with a /.
+DROPBOX_TIMEOUT (optional, default 100) Timeout in seconds for requests to the API. If None, the client will wait forever. The default value matches the SDK at the time of this writing.
+DROPBOX_WRITE_MODE (optional, default 'add')Sets the Dropbox WriteMode strategy. Read more in the official docs.
+"""
+
 '''
 SOCIALACCOUNT_PROVIDERS = {
     "github": {

@@ -25,3 +25,4 @@ dj-database-url
 django-toolbelt
 boto3
 django-storages
+django-storages[dropbox]
