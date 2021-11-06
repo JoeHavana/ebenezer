@@ -33,8 +33,8 @@ urlpatterns = [
 # REST-Framework
 	# USERS:
     #path('apis/account/', include('core.users.api.urls', 'account_api')),
-    #path('apis/gettoken/', TokenObtainPairView.as_view(), name="gettoken"),
-    #path('apis/refresh_token/', TokenRefreshView.as_view(), name="refresh_token"),
+    path('apis/gettoken/', TokenObtainPairView.as_view(), name="gettoken"),
+    path('apis/refresh_token/', TokenRefreshView.as_view(), name="refresh_token"),
 
 # Vanilla Django
     path('article/<slug>/', ItemDetail, name="product-detail"),
@@ -43,6 +43,8 @@ urlpatterns = [
     path('category/', AllCategories.as_view(), name="all-categories"), # Revisar
     path('categories/', AllCategories.as_view(), name="all-categories"), # Revisar
     path('category/<slug>/', categoryDetail, name="category-detail"), # Revisar
+
+    path('blogs/<slug>/', blogCategoryDetail, name="blog-category-detail"), # Revisar
 
 # Newsletter App 
     path('newsletter-subscribe/', newsletter_views.newsletter_signup, name="newsletter_signup"),

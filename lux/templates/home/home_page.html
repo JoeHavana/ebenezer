@@ -50,40 +50,67 @@
 
 {% if self.show_at_the_beg == "cc" %}
 <!-- Categorias -->
-  <section id="work" class="works sect-pt4">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="title-box text-center">
-              <h3 class="title-a">
-                Categories
-              </h3>
-              <div class="div-line"></div>
+  {% if categoria_y_tipo %}
+    <section id="work" class="works sect-pt4">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="title-box text-center">
+                <h3 class="title-a">
+                  Categories
+                </h3>
+                <div class="div-line"></div>
+              </div>
             </div>
           </div>
+        <div class="row">
+          <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
+            <ul id="portfolio-filters">
+              <li data-filter="*" class="filter-active">All</li>
+                {% for category in categoria_y_tipo.all %}
+                  <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
+                {% endfor %}
+
+            </ul>
+          </div>
         </div>
-  
-      <div class="row">
-        <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
-          <ul id="portfolio-filters">
-            <li data-filter="*" class="filter-active">All</li>
-              {% for category in categoria_y_tipo.all %}
-                <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
-              {% endfor %}
 
-          </ul>
-        </div>
-      </div>
+    
+          <div class="row portfolio-container">
 
-  
-        <div class="row portfolio-container">
+            {% for item in items %}
+            <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
 
-          {% for item in items %}
-          <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
+              <div class="work-box">
+                {% if item.or_automate_a_page %}
+                  <a href="{{ item.get_absolute_url }}">
+                    {% if item.main_picture_of_presentation %}
+                    <div class="work-img">
+                          {% image item.main_picture_of_presentation width-500 as img %}
+                          <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                    </div>
+                    {% endif %}
+                  </a>
+                  <div class="work-content">
+                    <div class="row">
 
-            <div class="work-box">
-              {% if item.or_automate_a_page %}
-                <a href="{{ item.get_absolute_url }}">
+                      <div class="col-sm-12">
+                        <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                        <div class="w-more" style="width: 100% !important">
+                          <a href="{{ item.get_absolute_url }}">
+                          <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                          </a> 
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  
+                {% else %}
+                <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+
                   {% if item.main_picture_of_presentation %}
                   <div class="work-img">
                         {% image item.main_picture_of_presentation width-500 as img %}
@@ -95,9 +122,14 @@
                   <div class="row">
 
                     <div class="col-sm-12">
-                      <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                      <h2 class="w-title">
+                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
                       <div class="w-more" style="width: 100% !important">
-                        <a href="{{ item.get_absolute_url }}">
+                        <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                        {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                        {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
                         <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
                         </a> 
                       </div>
@@ -105,47 +137,16 @@
                     
                   </div>
                 </div>
-                
-              {% else %}
-              <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-              {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-              {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
-
-                {% if item.main_picture_of_presentation %}
-                <div class="work-img">
-                      {% image item.main_picture_of_presentation width-500 as img %}
-                      <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
-                </div>
                 {% endif %}
-              </a>
-              <div class="work-content">
-                <div class="row">
-
-                  <div class="col-sm-12">
-                    <h2 class="w-title">
-                    <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-                    {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-                    {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
-                    <div class="w-more" style="width: 100% !important">
-                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
-                      <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
-                      </a> 
-                    </div>
-                  </div>
-                  
-                </div>
               </div>
-              {% endif %}
             </div>
-          </div>
-          {% endfor %}
+            {% endfor %}
 
+          </div>
+    
         </div>
-  
-      </div>
     </section>
+  {% endif %}
 {% elif self.show_at_the_beg == "rl" %}
 
   {% if self.ofertas_especiales %}
@@ -210,41 +211,67 @@
 
 
 {% if self.show_in_midl == "cc" %}
-<!-- Categorias -->
-  <section id="work" class="works sect-pt4">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="title-box text-center">
-              <h3 class="title-a">
-                Categories
-              </h3>
-              <div class="div-line"></div>
+  {% if categoria_y_tipo %}
+    <section id="work" class="works sect-pt4">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="title-box text-center">
+                <h3 class="title-a">
+                  Categories
+                </h3>
+                <div class="div-line"></div>
+              </div>
             </div>
           </div>
+        <div class="row">
+          <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
+            <ul id="portfolio-filters">
+              <li data-filter="*" class="filter-active">All</li>
+                {% for category in categoria_y_tipo.all %}
+                  <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
+                {% endfor %}
+
+            </ul>
+          </div>
         </div>
-  
-      <div class="row">
-        <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
-          <ul id="portfolio-filters">
-            <li data-filter="*" class="filter-active">All</li>
-              {% for category in categoria_y_tipo.all %}
-                <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
-              {% endfor %}
 
-          </ul>
-        </div>
-      </div>
+    
+          <div class="row portfolio-container">
 
-  
-        <div class="row portfolio-container">
+            {% for item in items %}
+            <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
 
-          {% for item in items %}
-          <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
+              <div class="work-box">
+                {% if item.or_automate_a_page %}
+                  <a href="{{ item.get_absolute_url }}">
+                    {% if item.main_picture_of_presentation %}
+                    <div class="work-img">
+                          {% image item.main_picture_of_presentation width-500 as img %}
+                          <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                    </div>
+                    {% endif %}
+                  </a>
+                  <div class="work-content">
+                    <div class="row">
 
-            <div class="work-box">
-              {% if item.or_automate_a_page %}
-                <a href="{{ item.get_absolute_url }}">
+                      <div class="col-sm-12">
+                        <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                        <div class="w-more" style="width: 100% !important">
+                          <a href="{{ item.get_absolute_url }}">
+                          <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                          </a> 
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  
+                {% else %}
+                <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+
                   {% if item.main_picture_of_presentation %}
                   <div class="work-img">
                         {% image item.main_picture_of_presentation width-500 as img %}
@@ -256,9 +283,14 @@
                   <div class="row">
 
                     <div class="col-sm-12">
-                      <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                      <h2 class="w-title">
+                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
                       <div class="w-more" style="width: 100% !important">
-                        <a href="{{ item.get_absolute_url }}">
+                        <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                        {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                        {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
                         <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
                         </a> 
                       </div>
@@ -266,47 +298,16 @@
                     
                   </div>
                 </div>
-                
-              {% else %}
-              <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-              {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-              {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
-
-                {% if item.main_picture_of_presentation %}
-                <div class="work-img">
-                      {% image item.main_picture_of_presentation width-500 as img %}
-                      <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
-                </div>
                 {% endif %}
-              </a>
-              <div class="work-content">
-                <div class="row">
-
-                  <div class="col-sm-12">
-                    <h2 class="w-title">
-                    <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-                    {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-                    {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
-                    <div class="w-more" style="width: 100% !important">
-                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
-                      <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
-                      </a> 
-                    </div>
-                  </div>
-                  
-                </div>
               </div>
-              {% endif %}
             </div>
-          </div>
-          {% endfor %}
+            {% endfor %}
 
+          </div>
+    
         </div>
-  
-      </div>
     </section>
+  {% endif %}
 {% elif self.show_in_midl == "rl" %}
   {% if self.ofertas_especiales %}
       <!--  Ofertas -->
@@ -371,41 +372,67 @@
 
 
 {% if self.show_at_the_end == "cc" %}
-<!-- Categorias -->
-  <section id="work" class="works sect-pt4">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="title-box text-center">
-              <h3 class="title-a">
-                Categories
-              </h3>
-              <div class="div-line"></div>
+  {% if categoria_y_tipo %}
+    <section id="work" class="works sect-pt4">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="title-box text-center">
+                <h3 class="title-a">
+                  Categories
+                </h3>
+                <div class="div-line"></div>
+              </div>
             </div>
           </div>
+        <div class="row">
+          <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
+            <ul id="portfolio-filters">
+              <li data-filter="*" class="filter-active">All</li>
+                {% for category in categoria_y_tipo.all %}
+                  <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
+                {% endfor %}
+
+            </ul>
+          </div>
         </div>
-  
-      <div class="row">
-        <div class="col-lg-12"> <!-- . d-flex justify-content-center -->
-          <ul id="portfolio-filters">
-            <li data-filter="*" class="filter-active">All</li>
-              {% for category in categoria_y_tipo.all %}
-                <li data-filter=".filter-{{ category.slug }}">{{ category.category_name|title }}</li>
-              {% endfor %}
 
-          </ul>
-        </div>
-      </div>
+    
+          <div class="row portfolio-container">
 
-  
-        <div class="row portfolio-container">
+            {% for item in items %}
+            <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
 
-          {% for item in items %}
-          <div class="col-md-4 portfolio-item  {% for category in item.categories.all %} filter-{{ category.slug }} {% endfor %}">
+              <div class="work-box">
+                {% if item.or_automate_a_page %}
+                  <a href="{{ item.get_absolute_url }}">
+                    {% if item.main_picture_of_presentation %}
+                    <div class="work-img">
+                          {% image item.main_picture_of_presentation width-500 as img %}
+                          <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
+                    </div>
+                    {% endif %}
+                  </a>
+                  <div class="work-content">
+                    <div class="row">
 
-            <div class="work-box">
-              {% if item.or_automate_a_page %}
-                <a href="{{ item.get_absolute_url }}">
+                      <div class="col-sm-12">
+                        <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                        <div class="w-more" style="width: 100% !important">
+                          <a href="{{ item.get_absolute_url }}">
+                          <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
+                          </a> 
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  
+                {% else %}
+                <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
+
                   {% if item.main_picture_of_presentation %}
                   <div class="work-img">
                         {% image item.main_picture_of_presentation width-500 as img %}
@@ -417,9 +444,14 @@
                   <div class="row">
 
                     <div class="col-sm-12">
-                      <h2 class="w-title"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
+                      <h2 class="w-title">
+                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
                       <div class="w-more" style="width: 100% !important">
-                        <a href="{{ item.get_absolute_url }}">
+                        <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
+                        {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
+                        {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
                         <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
                         </a> 
                       </div>
@@ -427,47 +459,16 @@
                     
                   </div>
                 </div>
-                
-              {% else %}
-              <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-              {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-              {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
-
-                {% if item.main_picture_of_presentation %}
-                <div class="work-img">
-                      {% image item.main_picture_of_presentation width-500 as img %}
-                      <img src="{{ img.url }}" class="img-fluid" alt="{{ item.title }}">
-                </div>
                 {% endif %}
-              </a>
-              <div class="work-content">
-                <div class="row">
-
-                  <div class="col-sm-12">
-                    <h2 class="w-title">
-                    <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-                    {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-                    {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">{{ item.title }}</a></h2>
-                    <div class="w-more" style="width: 100% !important">
-                      <a href="{% if item.internal_page %}{{ item.internal_page.url }}{% else %}{{ item.URL }}{% endif %}"
-                      {% if item.open_in_a_new_tab %} target="_blank"{% endif %}
-                      {% if item.rel_attribute %} rel="{{ item.rel_attribute }}{% endif %}">
-                      <p class="w-short-desc">{{ item.short_description|truncatewords:3 }}<span class="text-dark">see more</span></p>
-                      </a> 
-                    </div>
-                  </div>
-                  
-                </div>
               </div>
-              {% endif %}
             </div>
-          </div>
-          {% endfor %}
+            {% endfor %}
 
+          </div>
+    
         </div>
-  
-      </div>
     </section>
+  {% endif %}
 {% elif self.show_at_the_end == "rl" %}
   {% if self.ofertas_especiales %}
       <!--  Ofertas -->
@@ -603,8 +604,12 @@
 	      <div class="container">
 	        <div class="row">
 	          <div class="col-lg-6 text-center">
+              {% if self.newsletter_title or self.newsletter_comment %}
 	            <h4 class="main-title blink my-4">{{ self.newsletter_title }}</h4>
 	            <p class="text-muted text-left mt-5">{{ self.newsletter_comment }}</p>
+              {% else %}
+              <h4 class="main-title blink my-4">Subscribe to Our Newsletter</h4>
+              {% endif %}
 	          </div>
 	          <div class="col-lg-1"></div>
 	          <div class="col-lg-5">

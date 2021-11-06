@@ -92,6 +92,10 @@ def categoryDetail(request, slug):
 	}
 	return render(request, 'home/category_detail.html', context)
 
+def blogCategoryDetail(request, slug):
+	pass
+
+
 def ItemDetail(request, slug):
 	if request.user.is_authenticated:
 		item = Item.objects.get(slug=slug)

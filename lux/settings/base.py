@@ -416,6 +416,15 @@ ROOT_URLCONF = 'lux.urls'
 WSGI_APPLICATION = 'lux.wsgi.application'
 
 
+# LearnWagtail CAP #46 -> WhiteNois Configuration
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+COMPRESS_OFFLINE = True
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
+COMPRESS_CSS_HASHING_METHOD = 'content'
+
 '''
 SOCIALACCOUNT_PROVIDERS = {
     "github": {

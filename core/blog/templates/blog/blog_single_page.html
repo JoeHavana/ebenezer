@@ -26,7 +26,7 @@
     <section class="ftco-section">
       <div class="container">
         <div class="row">
-          <div class="col-lg-12 ftco-animate"> <!-- con aside col-lg-8 -->
+          <div class="col-lg-8 ftco-animate"> <!-- con aside col-lg-8 -->
 
             {% for block in self.content %}
               {% include_block block %}
@@ -41,25 +41,17 @@
               </div>
             </div>
             
-              {% for iter in self.blog_authors.all %}
-                {% image iter.author.image fill-140x180 as img %}
+
+              {% for iter in self.authors.all %}
+                {% image iter.image fill-140x180 as img %}
                 <div class="about-author d-flex mb-5">
                   <div class="bio align-self-md-center mr-5">
-                    <img src="{{ img.url }}" alt="{{ iter.author.name }}" class="img-fluid mb-4">
+                    <img src="{{ img.url }}" alt="{{ iter.name }}" class="img-fluid mb-4">
                   </div>
                   <div class="desc align-self-md-center">
-                    <h3>{{ iter.author.name }} <span class="btn"><a >Autor</a></span></h3>
-                    <p>About me</p>
-                    {% if iter.author.website %}
-                        <a target="_blank" href="{{ iter.author.website }}">Visite a {{ iter.author.name }}</a>
-                    {% endif %}
-                    <br>
-                    {% if iter.author.social_networks %}
-
-                      {% for block in iter.author.social_networks %}
-                        {% include_block block %}
-                      {% endfor %}
-
+                    <h3>{{ iter.name }} <span class="btn"><code>Author</code></span></h3>
+                    {% if iter.website %}
+                        <a target="_blank" rel="nofollow" href="{{ iter.website }}">{{ iter.website }}</a>
                     {% endif %}
                   </div>
                 </div>
@@ -108,6 +100,11 @@
                 <li class="comment">
                  {% render_xtdcomment_tree for page allow_flagging allow_feedback show_feedback %} 
                 </li>
+                <!--li>
+                  <div class="comments">
+                    {% render_comment_list for object %}
+                  </div>
+                </li-->
               </ul>
               {% endif %}
               <!-- END comment-list -->
@@ -123,10 +120,10 @@
 
 
 
-{% comment %}
+
           <!--  ASIDE -->
-          <div class="col-lg-4 sidebar ftco-animate">
-            <div class="sidebar-box">
+          <div class="col-lg-4 sidebar">
+            <div>
               <form action="#" class="search-form">
                 <div class="form-group">
                 	<div class="icon">
@@ -137,80 +134,73 @@
               </form>
             </div>
 
-            <div class="sidebar-box ftco-animate">
-              <div class="categories">
-                <h3 class="heading-2">Categories <span>{{ self.all_categories.count }}</span></h3>
+            <div>
+              <div class="my-4">
+                <h3 class="heading-2 p-3" style="background: #000; color: #fff;">Categories <span class="badge" style="background-color: red;">{{ count_categories }}</span></h3>
                 {% for ctg in all_categories %}
-                <li>
-                  <a href="{{ self.get_parent.url }}?category={{ ctg.slug }}">
+                  <a class="btn btn-block btn-outline-info" href="{{ ctg.get_absolute_url }}">
                     {{ ctg.name }} <span></span>
                   </a>
-                </li>
                 {% endfor %}
               </div>
             </div>
 
-            <div class="sidebar-box ftco-animate">
-              <h3 class="heading-2">Recent Blog</h3>
+            <div class="my-4">
+              <h3 class="heading-2 p-3" style="background: #000; color: #fff;">Recent Posts</h3>
+              {% for post in posts %}
               <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url({% static 'images/image_1.jpg' %});"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> Sept. 25, 2019</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                {% image post.header_image width-90 as img %}
+                <a href="{{ post.url }}">
+                  <div class="mx-3">
+                    <img src="{{ img.url }}" alt="{{ img.alt }}" alt="{{ img.alt }}" class="img-fluid">
+                    <h3 class="text-info">{{ post.main_title|title }}</h3>
+                    <div class="">
+                      {% if post.published_date_display %}
+                      <div><span class="fas fa-calender"></span>{{ post.published_date_display }}</div>
+                      {% endif %}
+                    </div>
                   </div>
-                </div>
+                </a>
               </div>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url({% static 'images/image_2.jpg' %});"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> Sept. 25, 2019</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_3.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> Sept. 25, 2019</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
+              {% endfor %}
             </div>
 
 
-            <div class="sidebar-box ftco-animate">
-              <h3 class="heading-2">Tag Cloud <div class="badge text-white" style="background-color: #000;">{{ self.tags.count }}</div></h3>
+            <div class="my-4">
+              <h3 class="heading-2 p-3" style="background: #000; color: #fff;">Tags Related</h3>
               <div class="tagcloud">
                 {% for tag in page.tags.all %}
-                  <a href="/blogs/?tag={{ tag.slug }}" class="tag-cloud-link">{{ tag }}</a>
+                  <a href="/blogs/?tag={{ tag.slug }}" class="btn btn-outline-dark">{{ tag }}</a>
                 {% endfor %}
-                <hr>
-                <a href="#" class="tag-cloud-link">menu dish</a>
-                <a href="#" class="tag-cloud-link">food</a>
-                <a href="#" class="tag-cloud-link">sweet</a>
-                <a href="#" class="tag-cloud-link">tasty</a>
-                <a href="#" class="tag-cloud-link">delicious</a>
-                <a href="#" class="tag-cloud-link">desserts</a>
-                <a href="#" class="tag-cloud-link">drinks</a>
               </div>
             </div>
 
-            <div class="sidebar-box ftco-animate">
-              <h3 class="heading-2">Paragraph</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
+            <div class="my-4">
+            <!-- Seccion del Newsletter -->
+              <div class="py-3" style="background-color: #000;">
+                <div class="container">
+                    <div class="col-lg-12 text-center">
+                      <h4 class="main-title blink my-4">Subscribe</h4>
+                      <p class="text-muted text-left mt-5">Enter your email bellow and get notified on the latest posts</p>
+                    </div>
+                    <div class="col-lg-12">
+                      <form action="{% url 'newsletter_signup' %}" method="post">{% csrf_token %}
+                        <div class="my-2">
+                          <input type="text" class="form-control w-100" name="name" placeholder="Name" />
+                        </div>
+                        <div class="my-2">
+                          <input type="email" class="form-control w-100" name="email" placeholder="*E-mail" required />
+                        </div>
+                        <div class="my-4">
+                          <button class="btn btn-block btn-outline-main" type="submit">Suscribirse</button>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
             </div>
           </div>
-{% endcomment %}
+
 
 
 
@@ -220,30 +210,5 @@
     </section> <!-- .section -->
 
 
-    <!-- Seccion del Newsletter -->
-    <section class="my-5" style="background: #000 !important;">
-      <div class="large-newsletter">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-6 text-center">
-              <h4 class="main-title blink my-4">Manténgase Informado de Nuestras Publicaciones</h4>
-              <p class="text-muted text-left mt-5">Déjenos su email, y le enviaremos un mensaje cada vez que tengamos nuevas ofertas</p>
-            </div>
-            <div class="col-lg-1"></div>
-            <div class="col-lg-5">
-              <form action="{% url 'newsletter_signup' %}" method="post">{% csrf_token %}
-                <div class="form">
-                  <input type="text" name="name" placeholder="Nombre" />
-                </div>
-                <div class="form">
-                  <input type="email" name="email" placeholder="E-mail" required />
-                  <button class="btn-outline-main" type="submit">Suscribirse</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-  </section>
 
 {% endblock content %}
