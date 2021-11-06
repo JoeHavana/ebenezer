@@ -11,7 +11,7 @@ DEBUG = True
 SECRET_KEY = 'q=-bn^ow0)d2_w$$y=pm(2&(p%az99yv-2s7nv#uh$0369o%he'
 
 # SECURITY WARNING: define the correct hosts in production!
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = ['ebenezerchurch.pythonanywhere.com'] 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
